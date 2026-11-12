@@ -58,6 +58,7 @@ class GCNLayer(Module):
         return self.messages
 
     def backward(self, dout: torch.Tensor) -> torch.Tensor:
+        assert dout.device.type == self.__device.type
         assert self.previous_embeddings is not None
 
         self.W.accumulate_grad((self.norm_adjacency @ self.previous_embeddings).t() @ dout)

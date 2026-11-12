@@ -1,26 +1,13 @@
-from PIL import Image
-from torchvision.transforms import ToTensor
-from layers.convolutional import ConvolutionalLayer
+from utils import im2col, col2im
 import torch
 
-layer = ConvolutionalLayer(
-    kernel_size=3,
-    features=1,
-    padding=2
-)
-
 x = torch.tensor([
-    [1,2,3],
-    [4,5,6],
-    [7,8,9]
+    [
+        [i+1+5*j for i in range(5)] for j in range(5)
+    ] for _ in range(1)
 ], dtype=torch.float32)
-x = x.unsqueeze(0)  # Adiciona a dimensão do canal
-x = torch.concat([x, x, x], dim=0)  # Adiciona mais canais para simular uma imagem RGB
-print(x.size())
 
-# img = Image.open("imagem.png")
-# x = ToTensor()(img)
-
-# print(x.size())
-
-layer.forward(x)
+print(x)
+print(x.shape)
+y = im2col(x, 2, 1)
+print(col2im(y, (5,5), 2, 1))

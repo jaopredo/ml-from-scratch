@@ -17,10 +17,8 @@ class LinearLayer(Module):
         return out
 
     def backward(self, dout: torch.Tensor) -> torch.Tensor:
-        if dout.device != self.__device:
-            raise TypeError(f"Gradient tensor is on device {dout.device}, but layer is on device {self.__device}.")
-        if self.x is None:
-            raise ValueError("No forward pass has been called before backward.")
+        assert dout.device == self.__device
+        assert self.x is not None
         
         self.W.accumulate_grad(self.x.T @ dout)
         self.b.accumulate_grad(torch.sum(dout, dim=0))
